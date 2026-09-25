@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sreeram — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-topbar: #2c2541;
+    --bg-sidebar: #1e1b2e;
+    --bg-sidebar-hover: #2a2540;
+    --bg-sidebar-active: #3a3060;
+    --bg-main: #f4f3f7;
+    --bg-card: #ffffff;
+    --bg-tabs: #ffffff;
+    --accent: #00a09d;
+    --accent2: #7c68ee;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --text-top: #e2dff0;
+    --text-sidebar: #b0abc8;
+    --text-sidebar-active: #ffffff;
+    --text-primary: #1a1833;
+    --text-secondary: #6b6884;
+    --border: #e5e3ed;
+    --border-sidebar: #3a3555;
+    --tab-active: #00a09d;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg-main);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--bg-topbar);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 0;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    z-index: 100;
+  }
+  .topbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 24px;
+    text-decoration: none;
+  }
+  .topbar-logo svg { width: 60px; height: 20px; }
+  .topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
+  .topbar-nav a {
+    color: var(--text-top);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.15s;
+    opacity: 0.85;
+  }
+  .topbar-nav a:hover { background: rgba(255,255,255,0.08); opacity: 1; }
+  .topbar-nav a.active { opacity: 1; font-weight: 500; }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+  }
+  .topbar-project {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--text-top);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .topbar-project:hover { background: rgba(255,255,255,0.13); }
+  .topbar-project span { opacity: 0.6; }
+  .topbar-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: #fff;
+    cursor: pointer;
+  }
+  .topbar-bell {
+    color: var(--text-top); opacity: 0.7; cursor: pointer; font-size: 16px;
+    transition: opacity 0.15s;
+  }
+  .topbar-bell:hover { opacity: 1; }
+
+  /* ── BODY LAYOUT ── */
+  .body-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px;
+    background: var(--bg-sidebar);
+    flex-shrink: 0;
+    overflow-y: auto;
+    padding: 12px 0;
+    border-right: 1px solid var(--border-sidebar);
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: #3a3555; border-radius: 2px; }
+
+  .sidebar-section {
+    margin-bottom: 4px;
+  }
+  .sidebar-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #7a7595;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 8px;
+  }
+  .sidebar-section-header .add-btn {
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 3px;
+    color: #7a7595;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .sidebar-section-header .add-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 14px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.12s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+  .sidebar-item:hover { background: var(--bg-sidebar-hover); }
+  .sidebar-item.active {
+    background: var(--bg-sidebar-active);
+    border-left-color: var(--accent);
+  }
+  .sidebar-item-left { display: flex; align-items: center; gap: 8px; }
+  .sidebar-item-name {
+    font-size: 13px;
+    color: var(--text-sidebar);
+    font-weight: 400;
+  }
+  .sidebar-item.active .sidebar-item-name { color: var(--text-sidebar-active); font-weight: 500; }
+  .sidebar-item-right { display: flex; align-items: center; gap: 8px; }
+  .sidebar-version {
+    font-size: 11px;
+    color: #5a5575;
+    font-family: var(--mono);
+  }
+  .sidebar-item.active .sidebar-version { color: #9a94b8; }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-green { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+  .dot-amber { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+  .dot-purple { background: var(--accent2); box-shadow: 0 0 6px rgba(124,104,238,0.5); }
+  .dot-teal { background: var(--accent); box-shadow: 0 0 6px rgba(0,160,157,0.5); }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg-main);
+  }
+
+  /* ── CONTENT HEADER ── */
+  .content-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    flex-shrink: 0;
+  }
+  .content-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 8px;
+    gap: 12px;
+  }
+  .content-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-family: var(--font);
+    text-decoration: none;
+  }
+  .btn-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-secondary);
+  }
+  .btn-outline:hover { border-color: #c0bcd0; color: var(--text-primary); background: #f8f7fc; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary:hover { background: #008a87; }
+  .btn-primary::after {
+    content: '▾';
+    margin-left: 4px;
+    font-size: 11px;
+  }
+  .btn-github {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-secondary);
+  }
+  .btn-github:hover { background: #f8f7fc; color: var(--text-primary); }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-top: 2px;
+  }
+  .tab {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active {
+    color: var(--tab-active);
+    border-bottom-color: var(--tab-active);
+    font-weight: 500;
+  }
+
+  /* ── SCROLLABLE CONTENT ── */
+  .content-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+  .content-body::-webkit-scrollbar { width: 6px; }
+  .content-body::-webkit-scrollbar-track { background: transparent; }
+  .content-body::-webkit-scrollbar-thumb { background: #d5d2e0; border-radius: 3px; }
+
+  /* ── PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── TIMELINE (History panel) ── */
+  .timeline-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .timeline-date::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .timeline-wrapper {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+  }
+  .timeline-rail {
+    width: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 14px;
+  }
+  .timeline-icon {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .timeline-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border);
+    margin-top: 6px;
+    min-height: 20px;
+  }
+  .timeline-card {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+  .timeline-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .commit-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .commit-avatar {
+    width: 26px; height: 26px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+  .commit-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+  .commit-time { font-size: 12px; color: var(--text-secondary); }
+  .commit-right { display: flex; align-items: center; gap: 10px; }
+  .badge-success {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11.5px; font-weight: 500;
+    color: #16a34a;
+    background: #dcfce7;
+    border: 1px solid #bbf7d0;
+    border-radius: 100px;
+    padding: 2px 9px;
+  }
+  .badge-info {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11.5px; font-weight: 500;
+    color: #0369a1;
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    border-radius: 100px;
+    padding: 2px 9px;
+  }
+  .badge-purple {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11.5px; font-weight: 500;
+    color: #6d28d9;
+    background: #ede9fe;
+    border: 1px solid #ddd6fe;
+    border-radius: 100px;
+    padding: 2px 9px;
+  }
+  .commit-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    border-top: 1px solid var(--border);
+    background: #fafafa;
+    flex-wrap: wrap;
+  }
+  .commit-hash {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: #f0fefe;
+    border: 1px solid #b2e8e7;
+    padding: 1px 7px;
+    border-radius: 4px;
+  }
+  .commit-msg { font-size: 12.5px; color: var(--text-secondary); flex: 1; }
+  .commit-icon { font-size: 11px; color: #9490a8; }
+
+  .stage-change-card {
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    background: #fafafa;
+  }
+  .stage-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  .stage-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; }
+  .stage-desc li { margin-left: 16px; margin-bottom: 3px; list-style: disc; }
+
+  /* ── SHELL PANEL ── */
+  .shell-panel {
+    background: #0f0e1a;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #2a2840;
+    font-family: var(--mono);
+  }
+  .shell-toolbar {
+    background: #1a1830;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #2a2840;
+  }
+  .shell-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .shell-title { font-size: 11px; color: #5a5878; margin-left: auto; }
+  .shell-body { padding: 18px; min-height: 320px; }
+  .shell-line { font-size: 13px; color: #a8a4c0; line-height: 1.9; }
+  .shell-prompt { color: var(--accent); }
+  .shell-cmd { color: #e2dff0; }
+  .shell-output { color: #6a6888; }
+  .shell-highlight { color: #7c68ee; }
+  .shell-success { color: #22c55e; }
+  .shell-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--accent);
+    vertical-align: middle;
+    animation: blink 1.1s step-end infinite;
+    margin-left: 2px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── SKILLS PANEL ── */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .skill-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .skill-card:hover { border-color: #c0bcd0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .skill-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .skill-card-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .skill-tag {
+    font-size: 10.5px; font-weight: 500;
+    padding: 2px 8px; border-radius: 100px;
+    background: #ede9fe; color: #6d28d9;
+  }
+  .skill-tag.teal { background: #ccfbf1; color: #0f766e; }
+  .skill-tag.blue { background: #dbeafe; color: #1d4ed8; }
+  .skill-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-pill {
+    font-size: 11.5px;
+    padding: 3px 10px;
+    background: #f4f3f7;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-secondary);
+    font-family: var(--mono);
+    transition: all 0.12s;
+  }
+  .skill-pill:hover { background: #ede9fe; border-color: #c4b5fd; color: #6d28d9; }
+
+  /* ── PROJECTS PANEL ── */
+  .project-list { display: flex; flex-direction: column; gap: 12px; }
+  .project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .project-card:hover { border-color: #c0bcd0; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .project-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .project-card-left { display: flex; align-items: center; gap: 10px; }
+  .project-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .project-title { font-size: 13.5px; font-weight: 600; color: var(--text-primary); }
+  .project-type { font-size: 11.5px; color: var(--text-secondary); margin-top: 1px; }
+  .project-body {
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    background: #fafafa;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .project-tech { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tech-pill {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-family: var(--mono);
+  }
+
+  /* ── MONITOR PANEL ── */
+  .monitor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .stat-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .stat-value { font-size: 26px; font-weight: 600; color: var(--text-primary); font-family: var(--mono); }
+  .stat-sub { font-size: 11.5px; color: var(--text-secondary); margin-top: 4px; }
+  .stat-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .stat-bar-fill { height: 100%; border-radius: 2px; background: var(--accent); transition: width 0.8s; }
+
+  /* ── CONTACT PANEL ── */
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .contact-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+  .contact-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(0,160,157,0.1); }
+  .contact-icon-box {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .contact-label { font-size: 11px; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .contact-value { font-size: 13.5px; font-weight: 500; color: var(--text-primary); }
+
+  /* ── SETTINGS ── */
+  .settings-section { margin-bottom: 24px; }
+  .settings-title {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .settings-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0eef8;
+    gap: 12px;
+  }
+  .settings-row-label { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+  .settings-row-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .settings-value { font-size: 12.5px; color: var(--text-secondary); font-family: var(--mono); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { width: 180px; }
+    .topbar-nav a { padding: 6px 8px; font-size: 12px; }
+  }
+
+  /* ── PROFILE WIDGET ── */
+  .sidebar-profile {
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--border-sidebar);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.02);
+  }
+  .profile-avatar-container {
+    position: relative;
+    width: 70px;
+    height: 70px;
+  }
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 10px rgba(0, 160, 157, 0.3);
+  }
+  .profile-status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-sidebar);
+  }
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .profile-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-sidebar-active);
+  }
+  .profile-title {
+    font-size: 10.5px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .profile-location {
+    font-size: 10.5px;
+    color: var(--text-sidebar);
+    opacity: 0.85;
+  }
+  .topbar-avatar-img {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  .commit-avatar-img {
+    width: 26px; height: 26px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  /* ── IDE EDITOR TAB ── */
+  .ide-container {
+    display: flex;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border-radius: 8px;
+    border: 1px solid #3c3c3c;
+    font-family: var(--mono);
+    height: 450px;
+    overflow: hidden;
+  }
+  .ide-sidebar {
+    width: 180px;
+    background: #252526;
+    border-right: 1px solid #3c3c3c;
+    font-size: 12px;
+    padding: 10px 0;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .ide-sidebar::-webkit-scrollbar { width: 4px; }
+  .ide-sidebar::-webkit-scrollbar-thumb { background: #3c3c3c; }
+  .ide-sidebar-title {
+    padding: 0 16px 8px;
+    color: #8c8c8c;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .ide-file {
+    padding: 5px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #cccccc;
+    font-size: 11.5px;
+  }
+  .ide-file:hover { background: #2a2d2e; }
+  .ide-file.active { background: #37373d; color: #ffffff; font-weight: 500; }
+  .ide-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ide-tabs {
+    display: flex;
+    background: #2d2d2d;
+    height: 35px;
+    align-items: center;
+    border-bottom: 1px solid #3c3c3c;
+  }
+  .ide-tab {
+    padding: 0 16px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e1e1e;
+    border-right: 1px solid #2d2d2d;
+    font-size: 12px;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  .ide-code-area {
+    flex: 1;
+    padding: 16px;
+    overflow: auto;
+    font-size: 12px;
+    line-height: 1.6;
+    background: #1e1e1e;
+  }
+  .ide-code-area::-webkit-scrollbar { width: 6px; height: 6px; }
+  .ide-code-area::-webkit-scrollbar-thumb { background: #3c3c3c; }
+  .ide-code-area pre { margin: 0; }
+  .code-kw { color: #569cd6; font-weight: 500; }
+  .code-str { color: #ce9178; }
+  .code-cmt { color: #6a9955; font-style: italic; }
+  .code-def { color: #dcdcaa; }
+  .code-type { color: #4ec9b0; }
+  .code-num { color: #b5cea8; }
+  .code-dec { color: #cbd5e1; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="topbar">
+  <a class="topbar-logo" href="#">
+    <!-- Odoo.sh style logo text -->
+    <svg viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="8" cy="12" r="7" fill="#00a09d"/>
+      <circle cx="22" cy="12" r="7" fill="#7c68ee" opacity="0.9"/>
+      <text x="34" y="17" font-family="IBM Plex Sans,sans-serif" font-weight="600" font-size="13" fill="#e2dff0">Sree Ram</text>
+    </svg>
+  </a>
+  <div class="topbar-nav">
+    <a href="#" class="active">Home</a>
+    <a href="#">Builds</a>
+    <a href="#">Status</a>
+    <a href="#">Logs</a>
+    <a href="#">Settings</a>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-project">
+      <span>sree-ram-ms</span>
+      <span>▾</span>
+    </div>
+    <span class="topbar-bell">🔔</span>
+    <img src="profile.png" alt="SR" class="topbar-avatar-img">
+  </div>
+</nav>
+
+<!-- BODY -->
+<div class="body-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- PROFILE WIDGET -->
+    <div class="sidebar-profile">
+      <div class="profile-avatar-container">
+        <img src="profile.png" alt="Sree Ram M S" class="profile-img">
+        <span class="profile-status-dot dot-green"></span>
+      </div>
+      <div class="profile-info">
+        <div class="profile-name">Sree Ram M S</div>
+        <div class="profile-title">Odoo & Full Stack Developer</div>
+        <div class="profile-location">📍 Kozhikode, Kerala, India</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-header">
+        Production
+      </div>
+      <a class="sidebar-item active" onclick="switchBranch('about', this)">
+        <div class="sidebar-item-left">
+          <div class="sidebar-item-name">about</div>
+        </div>
+        <div class="sidebar-item-right">
+          <span class="sidebar-version">v4.0</span>
+          <span class="dot dot-green"></span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-header">
+        Staging
+        <span class="add-btn">+</span>
+      </div>
+      <a class="sidebar-item" onclick="switchBranch('skills', this)">
+        <div class="sidebar-item-left">
+          <div class="sidebar-item-name">skills</div>
+        </div>
+        <div class="sidebar-item-right">
+          <span class="sidebar-version">v3.5</span>
+          <span class="dot dot-teal"></span>
+        </div>
+      </a>
+      <a class="sidebar-item" onclick="switchBranch('projects', this)">
+        <div class="sidebar-item-left">
+          <div class="sidebar-item-name">projects</div>
+        </div>
+        <div class="sidebar-item-right">
+          <span class="sidebar-version">v2.8</span>
+          <span class="dot dot-green"></span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-header">
+        Development
+        <span class="add-btn">+</span>
+      </div>
+      <a class="sidebar-item" onclick="switchBranch('experience', this)">
+        <div class="sidebar-item-left">
+          <div class="sidebar-item-name">experience</div>
+        </div>
+        <div class="sidebar-item-right">
+          <span class="sidebar-version">v3.0</span>
+          <span class="dot dot-purple"></span>
+        </div>
+      </a>
+      <a class="sidebar-item" onclick="switchBranch('monitor', this)">
+        <div class="sidebar-item-left">
+          <div class="sidebar-item-name">stats</div>
+        </div>
+        <div class="sidebar-item-right">
+          <span class="sidebar-version">v1.0</span>
+          <span class="dot dot-amber"></span>
+        </div>
+      </a>
+      <a class="sidebar-item" onclick="switchBranch('contact', this)">
+        <div class="sidebar-item-left">
+          <div class="sidebar-item-name">contact</div>
+        </div>
+        <div class="sidebar-item-right">
+          <span class="sidebar-version">v1.2</span>
+          <span class="dot dot-green"></span>
+        </div>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="content-header">
+      <div class="content-header-top">
+        <div class="content-title" id="content-title">about</div>
+        <div class="header-actions">
+          <button class="btn btn-github">⭐ GitHub</button>
+          <button class="btn btn-outline">🔀 Fork</button>
+          <button class="btn btn-outline">⟳ Merge</button>
+          <button class="btn btn-outline">🔒 SSH</button>
+          <button class="btn btn-primary" onclick="alert('Hire me! 🚀')">Hire Me</button>
+        </div>
+      </div>
+      <div class="tabs" id="tabs">
+        <div class="tab active" onclick="switchTab('history', this)">HISTORY</div>
+        <div class="tab" onclick="switchTab('shell', this)">SHELL</div>
+        <div class="tab" onclick="switchTab('editor', this)">EDITOR</div>
+        <div class="tab" onclick="switchTab('monitor', this)">MONITOR</div>
+        <div class="tab" onclick="switchTab('logs', this)">LOGS</div>
+        <div class="tab" onclick="switchTab('settings', this)">SETTINGS</div>
+      </div>
+    </div>
+
+    <div class="content-body">
+
+      <!-- ── HISTORY TAB ── -->
+      <div class="panel active" id="tab-history">
+
+        <!-- ABOUT branch -->
+        <div id="branch-about" class="branch-panel">
+          <div class="timeline-date">June 2026 — Present</div>
+
+          <div class="timeline-wrapper">
+            <div class="timeline-rail">
+              <img src="profile.png" class="commit-avatar-img" style="width:24px; height:24px; border-radius:50%; border:1px solid var(--accent);">
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="commit-author">
+                  <img src="profile.png" class="commit-avatar-img">
+                  <div>
+                    <span class="commit-name">sreeram</span>
+                    <span class="commit-time" style="margin-left:6px">— active now</span>
+                  </div>
+                </div>
+                <div class="commit-right">
+                  <span class="badge-success">✓ Open to Work</span>
+                  <a href="mailto:sreerammsofficial@gmail.com" class="btn btn-primary" style="font-size:12px; text-decoration:none;">Connect</a>
+                </div>
+              </div>
+              <div class="commit-row">
+                <span class="commit-icon">⟳</span>
+                <span class="commit-hash">a1b2c3d</span>
+                <span class="commit-msg">feat: Sree Ram M S — Odoo Developer & Full Stack Developer, Kozhikode, Kerala, India 🌴</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-wrapper">
+            <div class="timeline-rail">
+              <div class="timeline-icon">🧬</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="commit-author">
+                  <div>
+                    <span class="commit-name">profile-init</span>
+                    <span class="commit-time" style="margin-left:6px">— 3 years experience</span>
+                  </div>
+                </div>
+                <span class="badge-purple">Odoo ERP & Full Stack</span>
+              </div>
+              <div class="stage-change-card">
+                <div class="stage-label">STAGE: About Me</div>
+                <div class="stage-desc">
+                  <ul>
+                    <li><strong>Odoo ERP Developer</strong> with 3 years of hands-on experience in requirement analysis, custom module development, third-party integrations, and testing.</li>
+                    <li>Expertise across Odoo versions <strong>11 and 14 to 19</strong>, working with standard and custom models to build tailored business flows.</li>
+                    <li><strong>Vibe Coder / AI App Builder</strong> — developing modern AI-integrated tools (Wallet App, Excel Report Generator, Wishlist App) leveraging Claude AI / Anthropic API.</li>
+                    <li>Proven frontend & backend skills in <strong>Python, OWL, PostgreSQL, React, and REST APIs</strong>.</li>
+                    <li>On-site international project delivery experience, including <strong>4 months in Oman</strong> and <strong>2 weeks in Kuwait</strong>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-date">Education</div>
+          <div class="timeline-wrapper">
+            <div class="timeline-rail">
+              <div class="timeline-icon">🎓</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="commit-author">
+                  <div>
+                    <span class="commit-name">education</span>
+                    <span class="commit-time" style="margin-left:6px">— academic qualifications</span>
+                  </div>
+                </div>
+                <span class="badge-info">Computer Science</span>
+              </div>
+              <div class="stage-change-card">
+                <div class="stage-label">Academic History</div>
+                <div class="stage-desc">
+                  <ul style="list-style: none; padding-left: 0;">
+                    <li style="margin-bottom: 12px; margin-left: 0; list-style: none;">
+                      <strong style="color: var(--text-primary); font-size: 13px;">BSc Computer Science</strong> (2019 — 2022)<br>
+                      <span style="color: var(--text-secondary);">IHRD College of Applied Science Nadapuram — University of Calicut</span>
+                    </li>
+                    <li style="margin-left: 0; list-style: none;">
+                      <strong style="color: var(--text-primary); font-size: 13px;">Plus Two (Computer Science)</strong> (2017 — 2019)<br>
+                      <span style="color: var(--text-secondary);">Govt HSS Chorode</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-date">Certifications</div>
+          <div class="timeline-wrapper">
+            <div class="timeline-rail">
+              <div class="timeline-icon">🏆</div>
+            </div>
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="commit-author">
+                  <div>
+                    <span class="commit-name">certifications</span>
+                    <span class="commit-time" style="margin-left:6px">— verified credentials</span>
+                  </div>
+                </div>
+                <span class="badge-purple">Technical</span>
+              </div>
+              <div class="stage-change-card">
+                <div class="stage-label">List of Certifications</div>
+                <div class="stage-desc">
+                  <ul>
+                    <li><strong>Python Django</strong> (2022) — Luminar Technolab</li>
+                    <li><strong>Python</strong> (2022) — Sidhah Edutech</li>
+                    <li><strong>Full Stack Development with React and Drupal</strong> (2022) — Fireflies</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS branch -->
+        <div id="branch-skills" class="branch-panel" style="display:none">
+          <div class="timeline-date">Technical Skills</div>
+          <div class="skills-grid">
+            <div class="skill-card">
+              <div class="skill-card-header">
+                <span class="skill-card-title">⚙️ Odoo (Primary)</span>
+                <span class="skill-tag">Primary</span>
+              </div>
+              <div class="skill-list">
+                <span class="skill-pill">Module Development</span>
+                <span class="skill-pill">Odoo Customization</span>
+                <span class="skill-pill">XML & QWeb Templates</span>
+                <span class="skill-pill">Odoo ORM / Python</span>
+                <span class="skill-pill">OWL (Odoo Web Library)</span>
+                <span class="skill-pill">Accounting / Inventory / HR</span>
+                <span class="skill-pill">Odoo.sh & Git</span>
+                <span class="skill-pill">Versions 11 & 14–19</span>
+                <span class="skill-pill">Deployment & Configuration</span>
+              </div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-card-header">
+                <span class="skill-card-title">🌐 Web Development</span>
+                <span class="skill-tag teal">Full Stack</span>
+              </div>
+              <div class="skill-list">
+                <span class="skill-pill">HTML5 & CSS3</span>
+                <span class="skill-pill">JavaScript (ES6+)</span>
+                <span class="skill-pill">React</span>
+                <span class="skill-pill">REST APIs</span>
+                <span class="skill-pill">Bootstrap</span>
+              </div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-card-header">
+                <span class="skill-card-title">🤖 Vibe Coding / AI Apps</span>
+                <span class="skill-tag blue">Interactive</span>
+              </div>
+              <div class="skill-list">
+                <span class="skill-pill">Claude AI / Anthropic API</span>
+                <span class="skill-pill">AI-powered App Building</span>
+                <span class="skill-pill">Prompt Engineering</span>
+                <span class="skill-pill">SheetJS</span>
+              </div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-card-header">
+                <span class="skill-card-title">🛠️ Other Tech</span>
+                <span class="skill-tag teal">Environment</span>
+              </div>
+              <div class="skill-list">
+                <span class="skill-pill">Python</span>
+                <span class="skill-pill">PostgreSQL / SQL</span>
+                <span class="skill-pill">Django</span>
+                <span class="skill-pill">Git / GitHub</span>
+                <span class="skill-pill">Linux</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECTS branch -->
+        <div id="branch-projects" class="branch-panel" style="display:none">
+          <div class="timeline-date">Featured Projects</div>
+          <div class="project-list">
+            <div class="project-card">
+              <div class="project-card-header">
+                <div class="project-card-left">
+                  <div class="project-icon" style="background:#e0f2fe">⚙️</div>
+                  <div>
+                    <div class="project-title">Odoo Enterprise Customizations & Migrations</div>
+                    <div class="project-type">Odoo Module / ERP</div>
+                  </div>
+                </div>
+                <span class="badge-purple">Enterprise</span>
+              </div>
+              <div class="project-body">
+                Customized core modules (Website, Sales, Inventory, Accounting, POS, and Purchase). Developed custom PDF, Excel, and HTML view reports, and completed end-to-end database/module migrations across versions 11 and 14–19.
+                <div class="project-tech">
+                  <span class="tech-pill">Python</span>
+                  <span class="tech-pill">Odoo ORM</span>
+                  <span class="tech-pill">XML / QWeb</span>
+                  <span class="tech-pill">OWL (JS)</span>
+                  <span class="tech-pill">PostgreSQL</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 11.5px;">
+                  <a href="https://github.com/Sree-Ram-MS" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500;">🔗 View GitHub Profile</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-card-header">
+                <div class="project-card-left">
+                  <div class="project-icon" style="background:#ede9fe">💰</div>
+                  <div>
+                    <div class="project-title">Wallet App</div>
+                    <div class="project-type">AI-powered Web App</div>
+                  </div>
+                </div>
+                <span class="badge-success">✓ Live</span>
+              </div>
+              <div class="project-body">
+                Personal finance tracker with transaction history, balance tracking and smart insights. Developed using modern vibe-coding methodologies.
+                <div class="project-tech">
+                  <span class="tech-pill">Claude AI</span>
+                  <span class="tech-pill">React</span>
+                  <span class="tech-pill">JavaScript</span>
+                  <span class="tech-pill">HTML / CSS</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 11.5px;">
+                  <a href="https://github.com/Sree-Ram-MS/Wallet-App" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500;">🔗 Sree-Ram-MS/Wallet-App</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-card-header">
+                <div class="project-card-left">
+                  <div class="project-icon" style="background:#dcfce7">📊</div>
+                  <div>
+                    <div class="project-title">Excel Report Generator</div>
+                    <div class="project-type">AI-powered Web App</div>
+                  </div>
+                </div>
+                <span class="badge-success">✓ Live</span>
+              </div>
+              <div class="project-body">
+                Generates formatted Excel reports from user input automatically. Integrated with AI APIs to structure and process input.
+                <div class="project-tech">
+                  <span class="tech-pill">Claude AI</span>
+                  <span class="tech-pill">SheetJS</span>
+                  <span class="tech-pill">JavaScript</span>
+                  <span class="tech-pill">HTML / CSS</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 11.5px;">
+                  <a href="https://github.com/Sree-Ram-MS/Excel-Report-Generator" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500;">🔗 Sree-Ram-MS/Excel-Report-Generator</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-card-header">
+                <div class="project-card-left">
+                  <div class="project-icon" style="background:#fef9c3">⭐</div>
+                  <div>
+                    <div class="project-title">Wishlist App</div>
+                    <div class="project-type">Web App</div>
+                  </div>
+                </div>
+                <span class="badge-success">✓ Live</span>
+              </div>
+              <div class="project-body">
+                Personal wishlist manager to add, categorize, edit and track priority status of desired items with local persistence.
+                <div class="project-tech">
+                  <span class="tech-pill">HTML5</span>
+                  <span class="tech-pill">CSS3</span>
+                  <span class="tech-pill">JavaScript</span>
+                  <span class="tech-pill">LocalStorage</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 11.5px;">
+                  <a href="https://github.com/Sree-Ram-MS/Wishlist-App" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500;">🔗 Sree-Ram-MS/Wishlist-App</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPERIENCE branch -->
+        <div id="branch-experience" class="branch-panel" style="display:none">
+          <div class="timeline-date">Work Experience</div>
+          <div class="timeline-wrapper">
+            <div class="timeline-rail">
+              <div class="timeline-icon">💼</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="commit-author">
+                  <div class="commit-avatar" style="background:linear-gradient(135deg,#7c68ee,#4f46e5)">TS</div>
+                  <div>
+                    <span class="commit-name">Senior Odoo Developer</span>
+                    <span class="commit-time" style="margin-left:6px">@ Tecfuge Solutions — 04/2026 – Present</span>
+                  </div>
+                </div>
+                <span class="badge-success">✓ Current</span>
+              </div>
+              <div class="stage-change-card">
+                <div class="stage-label">Responsibilities & Key Work</div>
+                <div class="stage-desc">
+                  <ul>
+                    <li>Designing and implementing scalable ERP solutions using Odoo.</li>
+                    <li>Developing custom modules and advanced business workflows.</li>
+                    <li>Integrating payment gateways and external APIs.</li>
+                    <li>Leading module migration and upgrade projects.</li>
+                    <li>Building dashboards, reports, and automation solutions.</li>
+                    <li>Performing code reviews, optimization, and technical support.</li>
+                    <li>Collaborating with clients to gather requirements and deliver solutions.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-wrapper">
+            <div class="timeline-rail">
+              <div class="timeline-icon">💼</div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="commit-author">
+                  <div class="commit-avatar" style="background:linear-gradient(135deg,#00a09d,#0f766e)">CO</div>
+                  <div>
+                    <span class="commit-name">Odoo Developer</span>
+                    <span class="commit-time" style="margin-left:6px">@ Code-OX Technologies — 08/2023 – 03/2026</span>
+                  </div>
+                </div>
+                <span class="badge-info">Past</span>
+              </div>
+              <div class="stage-change-card">
+                <div class="stage-label">Responsibilities & Key Work</div>
+                <div class="stage-desc">
+                  <ul>
+                    <li>Developed and customized Odoo modules based on client requirements.</li>
+                    <li>Worked extensively on Sales, Purchase, Inventory, Accounting, POS, and Website modules.</li>
+                    <li>Developed APIs and integrated third-party services.</li>
+                    <li>Customized PDF, Excel, and HTML reports.</li>
+                    <li>Performed database migration and module migration across Odoo versions.</li>
+                    <li>Optimized system performance and business workflows.</li>
+                    <li>Worked with Git and Odoo.sh for version control and deployment.</li>
+                    <li><em>On-site international delivery</em>: Deployed and optimized systems on-site (4 months in Oman, 2 weeks in Kuwait).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-wrapper">
+            <div class="timeline-rail">
+              <div class="timeline-icon">💡</div>
+            </div>
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="commit-author">
+                  <div class="commit-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">AI</div>
+                  <div>
+                    <span class="commit-name">Freelance & AI Vibe Coding</span>
+                    <span class="commit-time" style="margin-left:6px">— Ongoing</span>
+                  </div>
+                </div>
+                <span class="badge-info">Freelance</span>
+              </div>
+              <div class="stage-change-card">
+                <div class="stage-label">ROLE: Independent AI App Architect</div>
+                <div class="stage-desc">
+                  <ul>
+                    <li>Building AI-powered web tools utilizing Claude AI and the Anthropic API to automate developer productivity and report workflows (Excel Generator, Wallet Tracker).</li>
+                    <li>Providing technical consulting on prompt engineering and quick prototyping for web solutions.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MONITOR / STATS branch -->
+        <div id="branch-monitor" class="branch-panel" style="display:none">
+          <div class="timeline-date">Developer Stats</div>
+          <div class="monitor-grid">
+            <div class="stat-card">
+              <div class="stat-label">Experience</div>
+              <div class="stat-value">3+</div>
+              <div class="stat-sub">Years of professional dev</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="width:75%"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Projects Deployed</div>
+              <div class="stat-value">15+</div>
+              <div class="stat-sub">Odoo & web projects</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="width:85%;background:#7c68ee"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Odoo Modules</div>
+              <div class="stat-value">25+</div>
+              <div class="stat-sub">Custom modules built</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="width:90%"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">AI Apps Built</div>
+              <div class="stat-value">3</div>
+              <div class="stat-sub">Vibe code projects</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="width:60%;background:#f59e0b"></div></div>
+            </div>
+          </div>
+          <div class="timeline-date">Odoo Version Support</div>
+          <div class="skills-grid">
+            <div class="skill-card" style="grid-column: 1 / -1;">
+              <div class="skill-card-header"><span class="skill-card-title">Odoo Versions Handled</span><span class="badge-success" style="font-size:11px">v11 – v19</span></div>
+              <div class="skill-list">
+                <span class="skill-pill" style="border-color:var(--accent); background:#e0fefe; color:var(--accent); font-weight:600;">v19.0 (Latest)</span>
+                <span class="skill-pill">v18.0</span>
+                <span class="skill-pill">v17.0</span>
+                <span class="skill-pill">v16.0</span>
+                <span class="skill-pill">v15.0</span>
+                <span class="skill-pill">v14.0</span>
+                <span class="skill-pill">v11.0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT branch -->
+        <div id="branch-contact" class="branch-panel" style="display:none">
+          <div class="timeline-date">Get In Touch</div>
+          <div class="contact-grid">
+            <a href="mailto:sreerammsofficial@gmail.com" class="contact-card" style="text-decoration: none;">
+              <div class="contact-icon-box" style="background:#dcfce7">📧</div>
+              <div>
+                <div class="contact-label">Email</div>
+                <div class="contact-value">sreerammsofficial@gmail.com</div>
+              </div>
+            </a>
+            <a href="https://linkedin.com/in/Sree-Ram-MS" target="_blank" class="contact-card" style="text-decoration: none;">
+              <div class="contact-icon-box" style="background:#dbeafe">💼</div>
+              <div>
+                <div class="contact-label">LinkedIn</div>
+                <div class="contact-value">linkedin.com/in/Sree-Ram-MS</div>
+              </div>
+            </a>
+            <a href="https://github.com/Sree-Ram-MS" target="_blank" class="contact-card" style="text-decoration: none;">
+              <div class="contact-icon-box" style="background:#f3f4f6">🐙</div>
+              <div>
+                <div class="contact-label">GitHub</div>
+                <div class="contact-value">github.com/Sree-Ram-MS</div>
+              </div>
+            </a>
+            <div class="contact-card">
+              <div class="contact-icon-box" style="background:#ede9fe">📍</div>
+              <div>
+                <div class="contact-label">Location</div>
+                <div class="contact-value">Kozhikode, Kerala, India 🌴</div>
+              </div>
+            </div>
+            <a href="tel:+919946392140" class="contact-card" style="text-decoration: none;">
+              <div class="contact-icon-box" style="background:#fef9c3">💬</div>
+              <div>
+                <div class="contact-label">Phone / WhatsApp</div>
+                <div class="contact-value">+91 99463 92140</div>
+              </div>
+            </a>
+            <div class="contact-card" style="border-color:var(--accent);background:linear-gradient(135deg,#f0fefe,#fff)">
+              <div class="contact-icon-box" style="background:#ccfbf1">🚀</div>
+              <div>
+                <div class="contact-label">Status</div>
+                <div class="contact-value" style="color:var(--accent)">Open to Work</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end tab-history -->
+
+      <!-- ── SHELL TAB ── -->
+      <div class="panel" id="tab-shell">
+        <div class="shell-panel">
+          <div class="shell-toolbar">
+            <span class="shell-dot" style="background:#ff5f56"></span>
+            <span class="shell-dot" style="background:#ffbd2e"></span>
+            <span class="shell-dot" style="background:#27c93f"></span>
+            <span class="shell-title">sreeram@portfolio ~ bash</span>
+          </div>
+          <div class="shell-body">
+            <div class="shell-line"><span class="shell-prompt">sreeram@portfolio:~$</span> <span class="shell-cmd">cat about.txt</span></div>
+            <div class="shell-line"><span class="shell-output">Name    : Sree Ram M S</span></div>
+            <div class="shell-line"><span class="shell-output">Role    : Odoo Developer & Full Stack Developer</span></div>
+            <div class="shell-line"><span class="shell-output">Location: Kozhikode, Kerala, India</span></div>
+            <div class="shell-line"><span class="shell-output">Exp     : 3 Years</span></div>
+            <br>
+            <div class="shell-line"><span class="shell-prompt">sreeram@portfolio:~$</span> <span class="shell-cmd">odoo-bin scaffold custom_sales addons/</span></div>
+            <div class="shell-line"><span class="shell-success">✔ Module scaffolded: custom_sales</span></div>
+            <div class="shell-line"><span class="shell-output">  → addons/custom_sales/__manifest__.py</span></div>
+            <div class="shell-line"><span class="shell-output">  → addons/custom_sales/models/</span></div>
+            <div class="shell-line"><span class="shell-output">  → addons/custom_sales/views/</span></div>
+            <br>
+            <div class="shell-line"><span class="shell-prompt">sreeram@portfolio:~$</span> <span class="shell-cmd">git log --oneline</span></div>
+            <div class="shell-line"><span class="shell-highlight">a1b2c3d</span><span class="shell-output"> feat: Odoo custom module migrations (v11 to v19)</span></div>
+            <div class="shell-line"><span class="shell-highlight">d4e5f6g</span><span class="shell-output"> feat: wallet app with Claude AI integration</span></div>
+            <div class="shell-line"><span class="shell-highlight">h7i8j9k</span><span class="shell-output"> feat: excel report generator (SheetJS)</span></div>
+            <div class="shell-line"><span class="shell-highlight">l0m1n2o</span><span class="shell-output"> feat: wishlist app with LocalStorage support</span></div>
+            <br>
+            <div class="shell-line"><span class="shell-prompt">sreeram@portfolio:~$</span> <span class="shell-cursor"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EDITOR TAB (IDE) ── -->
+      <div class="panel" id="tab-editor">
+        <div class="ide-container">
+          <aside class="ide-sidebar">
+            <div class="ide-sidebar-title">Workspace</div>
+            <div class="ide-file active">
+              <span>🐍</span> sale_order.py
+            </div>
+            <div class="ide-file">
+              <span>📄</span> __manifest__.py
+            </div>
+            <div class="ide-file">
+              <span>⚡</span> owl_dashboard.js
+            </div>
+            <div class="ide-file">
+              <span>🌐</span> index.html
+            </div>
+          </aside>
+          <main class="ide-main">
+            <header class="ide-tabs">
+              <div class="ide-tab">
+                <span>🐍</span> sale_order.py
+              </div>
+            </header>
+            <section class="ide-code-area">
+              <pre><code><span class="code-cmt"># -*- coding: utf-8 -*-</span>
+<span class="code-kw">from</span> odoo <span class="code-kw">import</span> models, fields, api, _
+<span class="code-kw">from</span> odoo.exceptions <span class="code-kw">import</span> UserError
+
+<span class="code-kw">class</span> <span class="code-type">CustomSalesOrder</span>(models.Model):
+    <span class="code-cmt">""" Inherits sale.order to add custom APIs and AI logs """</span>
+    _inherit = <span class="code-str">'sale.order'</span>
+
+    payment_status = fields.Selection([
+        (<span class="code-str">'pending'</span>, <span class="code-str">'Pending'</span>),
+        (<span class="code-str">'paid'</span>, <span class="code-str">'Paid'</span>),
+        (<span class="code-str">'failed'</span>, <span class="code-str">'Failed'</span>)
+    ], string=<span class="code-str">"Payment Status"</span>, default=<span class="code-str">'pending'</span>, tracking=<span class="code-kw">True</span>)
+
+    <span class="code-dec">@api.model</span>
+    <span class="code-kw">def</span> <span class="code-def">create</span>(self, vals):
+        <span class="code-cmt"># Custom logic for API triggers during sale creation</span>
+        res = <span class="code-kw">super</span>(CustomSalesOrder, self).create(vals)
+        <span class="code-kw">if</span> res.amount_total &gt; <span class="code-num">5000</span>:
+            res.message_post(body=_(<span class="code-str">"High-value sales order created. Processing payment sync..."</span>))
+        <span class="code-kw">return</span> res
+
+    <span class="code-kw">def</span> <span class="code-def">action_sync_payment_gateway</span>(self):
+        <span class="code-cmt">""" Core Integration Method: Synchronizes payment API """</span>
+        self.ensure_one()
+        <span class="code-kw">try</span>:
+            payload = {
+                <span class="code-str">'order_id'</span>: self.name,
+                <span class="code-str">'amount'</span>: self.amount_total,
+                <span class="code-str">'currency'</span>: self.currency_id.name
+            }
+            <span class="code-cmt"># Call custom integrated payment gateway client</span>
+            response = self.env[<span class="code-str">'payment.gateway.client'</span>].post(<span class="code-str">'/v1/charges'</span>, payload)
+            <span class="code-kw">if</span> response.get(<span class="code-str">'status'</span>) == <span class="code-str">'success'</span>:
+                self.write({<span class="code-str">'payment_status'</span>: <span class="code-str">'paid'</span>})
+            <span class="code-kw">else</span>:
+                self.write({<span class="code-str">'payment_status'</span>: <span class="code-str">'failed'</span>})
+        <span class="code-kw">except</span> Exception <span class="code-kw">as</span> e:
+            <span class="code-kw">raise</span> UserError(_(<span class="code-str">"Payment sync failed: %s"</span>) % <span class="code-kw">str</span>(e))</code></pre>
+            </section>
+          </main>
+        </div>
+      </div>
+
+      <!-- ── MONITOR TAB ── -->
+      <div class="panel" id="tab-monitor">
+        <div class="monitor-grid">
+          <div class="stat-card">
+            <div class="stat-label">Uptime</div>
+            <div class="stat-value">99.9%</div>
+            <div class="stat-sub">Always available</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:99%"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Response Rate</div>
+            <div class="stat-value">~2h</div>
+            <div class="stat-sub">Average reply time</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:90%;background:#22c55e"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Code Quality</div>
+            <div class="stat-value">A+</div>
+            <div class="stat-sub">Clean & documented</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:88%;background:#7c68ee"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Client Satisfaction</div>
+            <div class="stat-value">5★</div>
+            <div class="stat-sub">Freelance rating</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:95%;background:#f59e0b"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── LOGS TAB ── -->
+      <div class="panel" id="tab-logs">
+        <div class="shell-panel">
+          <div class="shell-toolbar">
+            <span class="shell-dot" style="background:#ff5f56"></span>
+            <span class="shell-dot" style="background:#ffbd2e"></span>
+            <span class="shell-dot" style="background:#27c93f"></span>
+            <span class="shell-title">portfolio build logs</span>
+          </div>
+          <div class="shell-body">
+            <div class="shell-line"><span class="shell-success">[INFO]</span> <span class="shell-output">2026-06-07 — Portfolio deployed on Odoo.sh style</span></div>
+            <div class="shell-line"><span class="shell-success">[INFO]</span> <span class="shell-output">Skill: Odoo Module Development — ACTIVE ✓</span></div>
+            <div class="shell-line"><span class="shell-success">[INFO]</span> <span class="shell-output">Skill: Python / ORM — ACTIVE ✓</span></div>
+            <div class="shell-line"><span class="shell-success">[INFO]</span> <span class="shell-output">Skill: Claude API Integration — ACTIVE ✓</span></div>
+            <div class="shell-line"><span class="shell-highlight">[DEBUG]</span><span class="shell-output"> Loading project: wallet_app ... done</span></div>
+            <div class="shell-line"><span class="shell-highlight">[DEBUG]</span><span class="shell-output"> Loading project: excel_report_gen ... done</span></div>
+            <div class="shell-line"><span class="shell-highlight">[DEBUG]</span><span class="shell-output"> Loading project: wishlist_app ... done</span></div>
+            <div class="shell-line"><span class="shell-success">[BUILD]</span> <span class="shell-output">All systems operational. Status: OPEN TO WORK 🟢</span></div>
+            <div class="shell-line"><span class="shell-output">&nbsp;</span></div>
+            <div class="shell-line"><span class="shell-prompt">$</span> <span class="shell-cursor"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS TAB ── -->
+      <div class="panel" id="tab-settings">
+        <div class="settings-section">
+          <div class="settings-title">Profile</div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Full Name</div><div class="settings-row-desc">Your display name on the portfolio</div></div>
+            <div class="settings-value">Sree Ram M S</div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Location</div><div class="settings-row-desc">Current city and country</div></div>
+            <div class="settings-value">Kozhikode, Kerala, IN</div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Availability</div><div class="settings-row-desc">Current work status</div></div>
+            <span class="badge-success">Open to Work</span>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-title">Tech Stack</div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Primary Framework</div></div>
+            <div class="settings-value">Odoo (Versions 11 & 14-19)</div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">AI Integration</div></div>
+            <div class="settings-value">Claude AI (Anthropic API)</div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Database</div></div>
+            <div class="settings-value">PostgreSQL / SQL</div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-title">Preferences</div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Remote Work</div><div class="settings-row-desc">Available for remote / freelance / on-site</div></div>
+            <span class="badge-success">Yes ✓</span>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Languages</div></div>
+            <div class="settings-value">Malayalam (Native), English (Professional)</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- content-body -->
+  </main>
+</div><!-- body-layout -->
+
+<script>
+  function switchBranch(branch, el) {
+    // Update sidebar active
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+
+    // Update title
+    document.getElementById('content-title').textContent = branch;
+
+    // Switch branch panel (inside history tab)
+    document.querySelectorAll('.branch-panel').forEach(p => p.style.display = 'none');
+    const bp = document.getElementById('branch-' + branch);
+    if (bp) bp.style.display = 'block';
+
+    // Switch to history tab
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-history').classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.tab').classList.add('active');
+  }
+
+  function switchTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+</script>
+</body>
+</html>
